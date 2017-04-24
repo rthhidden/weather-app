@@ -23,6 +23,7 @@ Because having proper UI is not a strict requirement, and also because there is 
 
 ## Prerequisite
 * Make sure ports 8080 and 8084 are free. `lsof -i:8080` (see TODO section)
+* Intellij Maven plugin
 * Cucumber for Java Intellij Plugin (if you want to run cucumber tests from Intellij)
 * export weather api key env variable before starting the server (see Run the app section) `export WEATHER_API_KEY=1d48a7a2ddf8ab3a52440b372f986181`
 
@@ -56,3 +57,4 @@ Now navigate to http://localhost:8080/
 * use a caching library. As weather does not change very quickly we could consider caching the results returned by the WeatherService. TTL it for a few seconds for example
 * run spring container and wiremock server on random free ports. At the moment they run on ports 8080 and 8084.
 * validate that if the user sends a request for a location which is not supported then a Bad Request is sent back with an appropriate error message.
+* all dates e.g. sunrise sunset are in UTC but maybe re-consider showing them in different timezones.
