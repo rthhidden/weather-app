@@ -1,0 +1,27 @@
+{
+  "weather": [
+    {
+      "id": 804,
+      "main": "Clouds",
+      "description": "overcast clouds",
+      "icon": "04d"
+    }
+  ],
+  "main": {
+    "temp": 286.23,
+    "pressure": 1029,
+    "humidity": 58,
+    "temp_min": 285.15,
+    "temp_max": 287.15
+  },
+  "sys": {
+    "type": 1,
+    "id": 5091,
+    "message": 0.0498,
+    "country": "GB",
+    "sunset": 1492801728
+  },
+  "id": 2643743,
+  "name": "London",
+  "cod": 200
+}

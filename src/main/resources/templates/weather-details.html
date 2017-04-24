@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+</head>
+<body>
+
+<h1>Weather</h1>
+<ul>
+    {{#weather}}
+    <li>City-{{city}}</li>
+    <li>Date-{{todayDate}}</li>
+    <li>Weather-{{weatherDescription}}</li>
+    <li>Temperature(Celsius)-{{temperatureCelsius}}</li>
+    <li>Temperature(Fahrenheit)-{{temperatureFahrenheit}}</li>
+    <li>Sunrise-{{sunrise}}</li>
+    <li>Sunset-{{sunset}}</li>
+    {{/weather}}
+</ul>
+
+<a href="/">back</a>
+
+</body>
+</html>
