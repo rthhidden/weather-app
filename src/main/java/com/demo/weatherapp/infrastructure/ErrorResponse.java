@@ -10,4 +10,8 @@ public interface ErrorResponse {
 
     String STATUS_CODE_ERROR = "Failure fetching weather content. Weather server responded with status %s";
 
+    String DEFAULT_ERROR = "Failure fetching weather content";
+
+    String NO_CONTENT = "Weather server replied with no content";
+
 }

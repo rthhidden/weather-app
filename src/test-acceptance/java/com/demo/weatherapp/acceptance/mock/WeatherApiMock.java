@@ -1,9 +1,7 @@
 package com.demo.weatherapp.acceptance.mock;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.matching.EqualToPattern;
-import gherkin.lexer.Th;
 import org.springframework.stereotype.Component;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -17,6 +15,7 @@ public class WeatherApiMock {
     private static final String WEATHER_PATH = "/data/2.5/weather";
     private static final String ACCEPTANCE_TEST_KEY = "acceptance-test-key";
     private static final String APPLICATION_JSON = "application/json";
+    private static final String HTML = "text/html";
     private static final int PORT = 8084;
 
     private final WireMockServer wireMockServer = new WireMockServer(wireMockConfig()
@@ -55,5 +54,18 @@ public class WeatherApiMock {
 
     public void reset() {
         wireMockServer.resetMappings();
+    }
+
+    public void primeRespondsWithHtml() {
+        wireMockServer.stubFor(get(urlPathEqualTo(WEATHER_PATH))
+                .willReturn(aResponse().withStatus(200)
+                        .withHeader("Content-Type", HTML)
+                        .withBody("<html></html>")));
+    }
+
+    public void primeNoContent() {
+        wireMockServer.stubFor(get(urlPathEqualTo(WEATHER_PATH))
+                .willReturn(aResponse().withStatus(200)
+                        .withHeader("Content-Type", APPLICATION_JSON)));
     }
 }

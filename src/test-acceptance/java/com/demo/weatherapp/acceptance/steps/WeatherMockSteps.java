@@ -30,4 +30,14 @@ public class WeatherMockSteps extends AbstractSteps {
     public void weatherApiReturnsStatusCodeAndJson(String city, int non200, String json) throws Throwable {
         weatherApiMock.primeNon200(city, non200, json);
     }
+
+    @Given("^weather api responds with html$")
+    public void weatherApiRespondsWithHtml() throws Throwable {
+        weatherApiMock.primeRespondsWithHtml();
+    }
+
+    @Given("^weather api responds with no content$")
+    public void weatherApiRespondsWithNoContent() throws Throwable {
+        weatherApiMock.primeNoContent();
+    }
 }

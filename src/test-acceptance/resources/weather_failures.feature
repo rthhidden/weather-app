@@ -5,18 +5,14 @@ Feature: failures retrieving weather
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure talking to weather server - Could not connect</div>
-    """
+      | <div>Failure talking to weather server - Could not connect</div> |
 
   Scenario: weather api server not responding
     Given weather api is not responding
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure talking to weather server - Read timeout</div>
-    """
+      | <div>Failure talking to weather server - Read timeout</div> |
 
   Scenario Outline: weather api server returns non 200
     Given weather api for "London" returns status code "<non200>" and json:
@@ -29,9 +25,7 @@ Feature: failures retrieving weather
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure fetching weather content. Weather server responded with status <non200></div>
-    """
+      | <div>Failure fetching weather content. Weather server responded with status <non200></div> |
     Examples:
       | non200 |
       | 201    |
@@ -51,9 +45,7 @@ Feature: failures retrieving weather
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure fetching weather content. Weather server content invalid.</div>
-    """
+      | <div>Failure fetching weather content. Weather server content invalid.</div> |
 
   Scenario: weather api server returns invalid sunrise
     Given weather api returns following data for "London":
@@ -85,9 +77,7 @@ Feature: failures retrieving weather
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure fetching weather content. Weather server content invalid.</div>
-    """
+      | <div>Failure fetching weather content. Weather server content invalid.</div> |
 
   Scenario: weather api server returns invalid sunset
     Given weather api returns following data for "London":
@@ -118,9 +108,7 @@ Feature: failures retrieving weather
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure fetching weather content. Weather server content invalid.</div>
-    """
+      | <div>Failure fetching weather content. Weather server content invalid.</div> |
 
   Scenario: weather api server returns invalid temp
     Given weather api returns following data for "London":
@@ -150,12 +138,24 @@ Feature: failures retrieving weather
     When want to fetch weather for "London"
     Then status code is "500"
     And following details are returned
-    """
-    <div>Failure fetching weather content. Weather server content invalid.</div>
-    """
+      | <div>Failure fetching weather content. Weather server content invalid.</div> |
 
   Scenario: web server 404 is handle
     When I request page "/unknown"
     Then status code is "404"
     And following details are returned
       | Oops, page not found |
+
+  Scenario: weather api server responds with 200 but no content
+    Given weather api responds with no content
+    When want to fetch weather for "London"
+    Then status code is "500"
+    And following details are returned
+      | <div>Weather server replied with no content</div> |
+
+  Scenario: weather api server responds with html
+    Given weather api responds with html
+    When want to fetch weather for "London"
+    Then status code is "500"
+    And following details are returned
+      | <div>Failure fetching weather content</div> |

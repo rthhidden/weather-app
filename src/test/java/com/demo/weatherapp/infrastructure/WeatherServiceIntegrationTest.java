@@ -37,16 +37,18 @@ public class WeatherServiceIntegrationTest {
     public static final List<Integer> non200Codes = Arrays.asList(400, 401, 402, 500, 502, 503, 504);
 
     private static final String CONTENT_TYPE = "application/json";
+    private static final String HTML = "text/html";
     private static final String CITY = "London";
     private static final String TEST_KEY = "test-key";
     private static final int READ_TIMEOUT = 1000;
     private static final String PATH = "/path";
+    private static final String DEFAULT_ERROR = "Failure fetching weather content";
 
     private final String CONNECT_TIMEOUT_MESSAGE = "Failure talking to weather server - Could not connect";
     private final String READ_TIMEOUT_MESSAGE = "Failure talking to weather server - Read timeout";
     private final String INVALID_CONTENT_MESSAGE = "Failure fetching weather content. Weather server content invalid.";
     private final String STATUS_CODE_ERROR = "Failure fetching weather content. Weather server responded with status %s";
-
+    private final String NO_CONTENT = "Weather server replied with no content";
 
     private ResponseDefinitionBuilder responseBuilder = aResponse()
             .withHeader("Content-Type", CONTENT_TYPE)
@@ -199,7 +201,7 @@ public class WeatherServiceIntegrationTest {
 
     }
 
-    @Theory
+    @Test
     public void shouldThrowException_whenResponseDataInvalid() {
         stubSuccessWithBody("invalid.json");
 
@@ -207,6 +209,26 @@ public class WeatherServiceIntegrationTest {
 
         assertThat(throwable).isInstanceOf(FetchWeatherException.class);
         assertThat(throwable.getMessage()).isEqualTo(INVALID_CONTENT_MESSAGE);
+    }
+
+    @Test
+    public void shouldThrowException_whenNoContentBack() {
+        stubNoContent();
+
+        Throwable throwable = catchThrowable(() -> subject.getWeather(CITY));
+
+        assertThat(throwable).isInstanceOf(FetchWeatherException.class);
+        assertThat(throwable.getMessage()).isEqualTo(NO_CONTENT);
+    }
+
+    @Test
+    public void shouldThrowException_whenReceivingHtmlBack() {
+        stubHtml();
+
+        Throwable throwable = catchThrowable(() -> subject.getWeather(CITY));
+
+        assertThat(throwable).isInstanceOf(FetchWeatherException.class);
+        assertThat(throwable.getMessage()).isEqualTo(DEFAULT_ERROR);
     }
 
     private void stubSuccessWithBody(String bodyFile) {
@@ -224,9 +246,23 @@ public class WeatherServiceIntegrationTest {
         );
     }
 
+    private void stubNoContent() {
+        stubFor(defaultMappingBuilder.willReturn(responseBuilder
+                .withBody("")));
+    }
+
     private void stubbNotResponding() {
         stubFor(defaultMappingBuilder.willReturn(responseBuilder
                 .withFixedDelay(READ_TIMEOUT + 500)));
+    }
+
+    private void stubHtml() {
+        stubFor(defaultMappingBuilder
+                .willReturn(responseBuilder
+                        .withStatus(200)
+                        .withHeader("Content-Type", HTML)
+                        .withBody("<html></html>")
+                ));
     }
 
 }

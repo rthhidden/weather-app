@@ -21,10 +21,7 @@ import org.springframework.web.util.UriTemplate;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
-
-import static com.demo.weatherapp.infrastructure.ErrorResponse.CONNECT_TIMEOUT;
-import static com.demo.weatherapp.infrastructure.ErrorResponse.INVALID_CONTENT;
-import static com.demo.weatherapp.infrastructure.ErrorResponse.READ_TIMEOUT;
+import static com.demo.weatherapp.infrastructure.ErrorResponse.*;
 
 @Service
 public class WeatherService {
@@ -53,6 +50,9 @@ public class WeatherService {
             throw handleRestException(e);
         } catch (HttpMessageNotReadableException e) {
             throw new FetchWeatherException(INVALID_CONTENT, e.getCause());
+        } catch (Throwable t) {
+            System.out.println();
+            throw t;
         }
     }
 
@@ -62,6 +62,10 @@ public class WeatherService {
                 .accept(MediaType.APPLICATION_JSON).build();
         ResponseEntity<WeatherVO> exchange = this.restTemplate
                 .exchange(request, WeatherVO.class);
+
+        if (exchange.getBody() == null) {
+            throw new FetchWeatherException(NO_CONTENT, null);
+        }
 
         return exchange.getBody();
     }
@@ -76,7 +80,7 @@ public class WeatherService {
 
         logger.error("exception talking to weather server", e);
 
-        throw e;
+        throw new FetchWeatherException(DEFAULT_ERROR, e.getCause());
     }
 
     private static class WeatherApiResponseErrorHandler implements ResponseErrorHandler {
