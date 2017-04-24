@@ -11,9 +11,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = {WeatherApplication.class, FixedClockProvider.class})
-@TestPropertySource(locations = "classpath:test.properties")
 //This is deprecated but unfortunately could not get the server to start without it
 @SuppressWarnings("deprecation")
 @org.springframework.boot.test.IntegrationTest
+@TestPropertySource(locations = "classpath:test.properties")
 public class AbstractSteps {
 }
